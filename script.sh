@@ -2,6 +2,7 @@
 if [ -e /tmp/out/lock ]
 then
     echo 'code erreur 22: script en cours d execution'
+    exit 2>>/tmp/out/log
 else
     if [ -d /tmp/in ]
     then
@@ -17,6 +18,7 @@ else
                 rm /tmp/out/lock.gz
             else
                 echo  'code erreur 12: impossible d effectuer l operation'
+                exit 2>>/tmp/out/log
             fi
         done
     else
