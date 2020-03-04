@@ -1,10 +1,17 @@
 #!/bin/bash
-if [ -d /tmp/in ]
+if [ -e /tmp/out/lock ]
 then
-echo 'OK!'
-cp /tmp/in/* /tmp/out
-chmod 775 /tmp/out
-gzip /tmp/out/*
+echo 'code erreur 22: script en cours d execution'
 else
-exit 2
+    if [ -d /tmp/in ]
+    then
+    touch /tmp/out/lock
+    echo 'OK!'
+    cp /tmp/in/* /tmp/out
+    chmod 775 /tmp/out
+    gzip /tmp/out/*
+    rm /tmp/out/lock
+    else
+    exit 2
+    fi
 fi
