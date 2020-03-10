@@ -12,7 +12,7 @@ else
     if [ -d /tmp/in ]
     then
         touch /tmp/out/lock
-        for file in $(find /tmp/in -name '*.txt')
+        for file in $(find /tmp/in -maxdepth 1 -type f)
         do
             name=${file##*/}
             if [ -f $file ]
@@ -21,11 +21,10 @@ else
                 then
                     echo $file >> /tmp/out/log
                     echo 'OK!'
-                    cp /tmp/in/* /tmp/out
-                    chmod 775 /tmp/out
-                    gzip /tmp/out/*
+                    mv $file /tmp/out
+                    gzip /tmp/out/$name
                     echo "/tmp/out/$name.gz traité" >> /tmp/out/log
-                    find /tmp/out -name '*.txt' | xargs rm -f
+                    #find /tmp/out -name '*.txt' | xargs rm -f
                 else
                     continue
                 fi
@@ -36,11 +35,7 @@ else
                 exit 12
             fi
         done
-        rm /tmp/out/lock.gz
-        if [ -e /tmp/out/log.gz ]
-        then
-            rm /tmp/out/log.gz
-        fi
+        rm /tmp/out/lock
     else
     exit 2
     fi
